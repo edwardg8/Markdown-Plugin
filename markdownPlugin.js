@@ -98,56 +98,57 @@ window.onload = function() {
 
     // Register the editor command
     provider.registerServiceProvider("orion.edit.command", serviceImpl, serviceProps);
-
-    //===================================== PART 3 ============================================================
-    /**
-     * The third part is a content assist extension that provides either an example document or a link as the two completion paths.
-     */
-
-    // Create the content assist service implementation
-    /*
-    var contentAssistImpl = {
-        computeProposals: function(buffer, offset, selection) {
-            var proposals = [];
-
-            //template - simple markdown document
-            if (buffer.length === 0) {
-                var text = "# Heading 1 \r\n" + "## Sub-Heading 1.1 \r\n" + "### Sub-Sub Heading 1.1.1 \r\n" + "## Sub-Heading 1.2 \r\n" + "# Heading 2 \r\n" + "# Heading 3 \r\n";
-
-                proposals.push({
-                    proposal: text,
-                    description: "Simple Markdown document",
-                    escapePosition: selection.offset + 152
-                });
-            }
-
-            var proposalText = "[Link Name](http:// \"Optional Title Here\")";
-            var description = "Insert a hyperlink";
-            proposals.push({
-                proposal: proposalText,
-                description: description
-            });
-
-            return proposals;
-        }
-    };*/
     
-
+	function isNumber(str) {
+	    var n = ~~Number(str);
+	    return String(n) === str && n >= 0;
+	  //return !isNaN(parseInt(n)) && isFinite(n);
+	}
+	
 	var contentAssistImpl = {
 		computeProposals: function(buffer, offset, context) {
-			var keywords = [ "**","break", "case", "catch", "continue", "debugger", "default", "delete", "do", "else",
+			var keywords = [ "#","##","###","####","#####","######",
+				"* ","+ ", "- ",
+				"===","---",
+				"* * *","- - -",
+				"_example_","__example__","___example___",
+				"*example*","**example**","***example***",
+				"<s>this is strike through text</s>",
+				">",">>",">>>",">>>>",">>>>>",
+				"<http://someurl>","[text to link](http://example.com/)","[like this](http://someurl \"this title shows up when you hover\")",
+				"![alternate text](https://sourceforge.net/images/icon_linux.gif)","![tiny arrow](https://sourceforge.net/images/icon_linux.gif \"tiny arrow\")",
+				"[[img src=attached-image.jpg alt=foobar]]","[[embed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]"
+				];
+				
+			/*"break", "case", "catch", "continue", "debugger", "default", "delete", "do", "else",
 	                        "finally", "for", "function", "if", "in", "instanceof", "new", "return", "switch",
-	                        "this", "throw", "try", "typeof", "var", "void", "while", "with" ];
-	        var descs=["This is bold","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
-	        
+	                        "this", "throw", "try", "typeof", "var", "void", "while", "with" ];*/
+	        var descs=["First level heading","Second level heading","Third level heading","Fourth level heading","Fifth level heading","Sith level heading",
+	        	"List","List","List",
+	        	"Huge header","Below a title-smaller header; Below a blank-horizontal line",
+	        	"Horizontal Line","Horizontal Line",
+	        	"Italic for the text \"example\"","Bold for the text \"example\"","Italic and bold for the text \"example\"",
+	        	"Italic for the text \"example\"","Bold for the text \"example\"","Italic and bold for the text \"example\"",
+	        	"Strike through text",
+	        	"Indentation: One tab","Indentation: Two tabs","Indentation: Three tabs","Indentation: Four tabs","Indentation: Five tabs",
+	        	"Explicit Link", "Link", "Link: show link when hover",
+	        	"Show an image","Show an image with a title",
+	        	"Reference an attached image","Embed a YouTube video"
+	        	];
 			var proposals = [];
-			var keyIndex;
+			
 			for (var i=0; i < keywords.length; i++) {
 				var keyword = keywords[i];
-				if (keyword.indexOf(context.prefix) === 0) {
-					keyIndex=i;
+				if (isNumber(context.line)){ //||context.line==="*"|| context.line==="-"
 					proposals.push({
-						proposal: keyword.substring(context.prefix.length),
+						proposal: ". ",
+					description: "i. : it formats line to numbered list"
+					});
+					break;
+				}
+				else if (keyword.indexOf(context.line) === 0 && keyword !== context.line) {
+					proposals.push({
+						proposal: keyword.substring(context.line.length),
 					description: keyword+" : "+descs[i]
 					});
 				}
