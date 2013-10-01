@@ -111,13 +111,18 @@ window.onload = function() {
 				new RegExp("^[*][^*]+$"),new RegExp("^[*]{2}[^*]+$"),new RegExp("^[*]{2}[^*]+[*]$"),new RegExp("^[*]{3}.*[^*]$"),
 				new RegExp("^[*]{3}.*[^*][*]$"),new RegExp("^[*]{3}.*[^*][*]{2}$"),
 				new RegExp("^<s>.+<[/]s$"),new RegExp("^<s>.+[^</]$"),new RegExp("^<s>.+<$"),new RegExp("^<s>.+<[/]$"),
-				new RegExp("^<http:////.+$"),new RegExp("^[[].+<$"),new RegExp("^[[].+[]]<//$")
+				new RegExp("^<http:[/][/].+$"),
+				new RegExp("^[[].+\][(]http:[/][/].*$"),new RegExp("^[[].+\][(]http:[/]$"),new RegExp("^[[].+\][(]http:$"),
+				new RegExp("^[[].+\][(]http$"),new RegExp("^[[].+\][(]htt$"),new RegExp("^[[].+\][(]ht$"),
+				new RegExp("^[[].+\][(]h$"),new RegExp("^[[].+\][(]$"),new RegExp("^[[].+\]$"),new RegExp("^[[].+$")
 			];
 			
 			var keyActions=["_","__","_","___","__","_",
 				"*","**","*","***","**","*",
 				">","</s>","/s>","s>",
-				">","(http://example.com/)"
+				">",
+				")","/example.com/)","//example.com/)","://example.com/)","p://example.com/)","tp://example.com/)","ttp://example.com/)","http://example.com/)",
+				"(http://example.com/)","](http://example.com/)"
 			];
 			
 			var keywords = [ "#","##","###","####","#####","######",
