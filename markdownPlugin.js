@@ -107,6 +107,19 @@ window.onload = function() {
 	
 	var contentAssistImpl = {
 		computeProposals: function(buffer, offset, context) {
+			var keys=[new RegExp("^_[^_]+$"),new RegExp("^__[^_]+$"),new RegExp("^__[^_]+_$"),new RegExp("^___[^_]+$"),new RegExp("^___[^_]+_$"),new RegExp("^___[^_]+__$"),
+				new RegExp("^[*][^*]+$"),new RegExp("^[*]{2}[^*]+$"),new RegExp("^[*]{2}[^*]+[*]$"),new RegExp("^[*]{3}.*[^*]$"),
+				new RegExp("^[*]{3}.*[^*][*]$"),new RegExp("^[*]{3}.*[^*][*]{2}$"),
+				new RegExp("^<s>.+<[/]s$"),new RegExp("^<s>.+[^</]$"),new RegExp("^<s>.+<$"),new RegExp("^<s>.+<[/]$"),
+				new RegExp("^<http:////.+$"),new RegExp("^[[].+<$"),new RegExp("^[[].+[]]<//$")
+			];
+			
+			var keyActions=["_","__","_","___","__","_",
+				"*","**","*","***","**","*",
+				">","</s>","/s>","s>",
+				">","(http://example.com/)"
+			];
+			
 			var keywords = [ "#","##","###","####","#####","######",
 				"* ","+ ", "- ",
 				"===","---",
@@ -137,6 +150,7 @@ window.onload = function() {
 	        	];
 			var proposals = [];
 			
+			var found=false;
 			for (var i=0; i < keywords.length; i++) {
 				var keyword = keywords[i];
 				if (isNumber(context.line)){ //||context.line==="*"|| context.line==="-"
@@ -144,6 +158,7 @@ window.onload = function() {
 						proposal: ". ",
 					description: "i. : it formats line to numbered list"
 					});
+					found=true;
 					break;
 				}
 				else if (keyword.indexOf(context.line) === 0 && keyword !== context.line) {
@@ -151,6 +166,18 @@ window.onload = function() {
 						proposal: keyword.substring(context.line.length),
 					description: keyword+" : "+descs[i]
 					});
+					found=true;
+				}
+			}
+			if (!found){
+				for (var i=0; i<keys.length; i++){
+					if (keys[i].test(context.line)){
+						proposals.push({
+							proposal: keyActions[i],
+						description: "REG"
+						});
+						break;
+					}
 				}
 			}
 			return proposals;
