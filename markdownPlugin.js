@@ -110,19 +110,37 @@ window.onload = function() {
 			var keys=[new RegExp("^_[^_]+$"),new RegExp("^__[^_]+$"),new RegExp("^__[^_]+_$"),new RegExp("^___[^_]+$"),new RegExp("^___[^_]+_$"),new RegExp("^___[^_]+__$"),
 				new RegExp("^[*][^*]+$"),new RegExp("^[*]{2}[^*]+$"),new RegExp("^[*]{2}[^*]+[*]$"),new RegExp("^[*]{3}.*[^*]$"),
 				new RegExp("^[*]{3}.*[^*][*]$"),new RegExp("^[*]{3}.*[^*][*]{2}$"),
-				new RegExp("^<s>.+<[/]s$"),new RegExp("^<s>.+[^</]$"),new RegExp("^<s>.+<$"),new RegExp("^<s>.+<[/]$"),
-				new RegExp("^<http:[/][/].+$"),
+				new RegExp("^<s>.+<[/]s$"),new RegExp("^<s>.+[^</]$"),new RegExp("^<s>.+<$"),new RegExp("^<s>.+<[/]$"), new RegExp("^<http:[/][/].+$"),
+				//[[img
+				new RegExp("^[[][[]img src=.+ alt=.+\]$"),new RegExp("^[[][[]img src=.+ alt=.+$"),new RegExp("^[[][[]img src=.+ alt$"),new RegExp("^[[][[]img src=.+ al$"),
+				new RegExp("^[[][[]img src=.+ a$"),new RegExp("^[[][[]img src=.+$"),
+				//[[embed
+				new RegExp("^[[][[]embed url=http://.+\]$"),new RegExp("^[[][[]embed url=http://.+$"),
+				new RegExp("^[[].+\][(]http:[/][/].*\".*\"$"),new RegExp("^[[].+\][(]http:[/][/].*\".*$"),
 				new RegExp("^[[].+\][(]http:[/][/].*$"),new RegExp("^[[].+\][(]http:[/]$"),new RegExp("^[[].+\][(]http:$"),
 				new RegExp("^[[].+\][(]http$"),new RegExp("^[[].+\][(]htt$"),new RegExp("^[[].+\][(]ht$"),
-				new RegExp("^[[].+\][(]h$"),new RegExp("^[[].+\][(]$"),new RegExp("^[[].+\]$"),new RegExp("^[[].+$")
+				new RegExp("^[[].+\][(]h$"),new RegExp("^[[].+\][(]$"),new RegExp("^[[].+\]$"),new RegExp("^[[].+$"),	
+				new RegExp("^[!][[].+\][(]https:[/][/].*\".*\"$"),new RegExp("^[!][[].+\][(]https:[/][/].*\".*$"),
+				new RegExp("^[!][[].+\][(]https:[/][/].*$"),new RegExp("^[!][[].+\][(]https:[/]$"),new RegExp("^[!][[].+\][(]https:$"),
+				new RegExp("^[!][[].+\][(]https$"),new RegExp("^[!][[].+\][(]http$"),new RegExp("^[!][[].+\][(]htt$"),new RegExp("^[!][[].+\][(]ht$"),
+				new RegExp("^[!][[].+\][(]h$"),new RegExp("^[!][[].+\][(]$"),new RegExp("^[!][[].+\]$"),new RegExp("^[!][[].+$")
 			];
 			
 			var keyActions=["_","__","_","___","__","_",
-				"*","**","*","***","**","*",
-				">","</s>","/s>","s>",
-				">",
-				")","/example.com/)","//example.com/)","://example.com/)","p://example.com/)","tp://example.com/)","ttp://example.com/)","http://example.com/)",
-				"(http://example.com/)","](http://example.com/)"
+				"*","**","*","***",
+				"**","*",
+				">","</s>","/s>","s>",">",
+				"]","]]","=text]]","t=text]]","lt=text]]"," alt=text]]",
+				"]","]]",
+				")","\")",
+				" \"hover\")","/example.com/ \"hover\")","//example.com/ \"hover\")",
+				"://example.com/ \"hover\")","p://example.com/ \"hover\")","tp://example.com/ \"hover\")",
+				"ttp://example.com/ \"hover\")","http://example.com/ \"hover\")","(http://example.com/ \"hover\")","](http://example.com/ \"hover\")",
+				")","\")",
+				"\"hover\")","/sourceforge.net/images/icon_linux.gif \"hover\")","//sourceforge.net/images/icon_linux.gif \"hover\")",
+				"://sourceforge.net/images/icon_linux.gif \"hover\")","s://sourceforge.net/images/icon_linux.gif \"hover\")","ps://sourceforge.net/images/icon_linux.gif \"hover\")",
+				"tps://sourceforge.net/images/icon_linux.gif \"hover\")","ttps://sourceforge.net/images/icon_linux.gif \"hover\")","https://sourceforge.net/images/icon_linux.gif) \"hover\"",
+				"(https://sourceforge.net/images/icon_linux.gif \"hover\")","](https://sourceforge.net/images/icon_linux.gif \"hover\")"
 			];
 			
 			var keywords = [ "#","##","###","####","#####","######",
@@ -135,12 +153,10 @@ window.onload = function() {
 				">",">>",">>>",">>>>",">>>>>",
 				"<http://someurl>","[text to link](http://example.com/)","[like this](http://someurl \"this title shows up when you hover\")",
 				"![alternate text](https://sourceforge.net/images/icon_linux.gif)","![tiny arrow](https://sourceforge.net/images/icon_linux.gif \"tiny arrow\")",
-				"[[img src=attached-image.jpg alt=foobar]]","[[embed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]"
-				];
+				"[[img src=attached-image.jpg alt=foobar]]","[[embed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]",
+				"[[include ref=SamplePage]]"
+			];
 				
-			/*"break", "case", "catch", "continue", "debugger", "default", "delete", "do", "else",
-	                        "finally", "for", "function", "if", "in", "instanceof", "new", "return", "switch",
-	                        "this", "throw", "try", "typeof", "var", "void", "while", "with" ];*/
 	        var descs=["First level heading","Second level heading","Third level heading","Fourth level heading","Fifth level heading","Sith level heading",
 	        	"List","List","List",
 	        	"Huge header","Below a title-smaller header; Below a blank-horizontal line",
@@ -151,8 +167,9 @@ window.onload = function() {
 	        	"Indentation: One tab","Indentation: Two tabs","Indentation: Three tabs","Indentation: Four tabs","Indentation: Five tabs",
 	        	"Explicit Link", "Link", "Link: show link when hover",
 	        	"Show an image","Show an image with a title",
-	        	"Reference an attached image","Embed a YouTube video"
-	        	];
+	        	"Reference an attached image","Embed a YouTube video",
+	        	"Embed another wiki page"
+	        ];
 			var proposals = [];
 			
 			var found=false;
@@ -247,3 +264,15 @@ window.onload = function() {
     // Finally, connect the provider
     provider.connect();
 };
+
+
+
+
+
+
+
+
+
+
+
+
