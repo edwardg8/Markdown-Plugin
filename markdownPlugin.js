@@ -107,31 +107,58 @@ window.onload = function() {
 	
 	var contentAssistImpl = {
 		computeProposals: function(buffer, offset, context) {
-			var keys=[new RegExp("^_[^_]+$"),new RegExp("^__[^_]+$"),new RegExp("^__[^_]+_$"),new RegExp("^___[^_]+$"),new RegExp("^___[^_]+_$"),new RegExp("^___[^_]+__$"),
-				new RegExp("^[*][^*]+$"),new RegExp("^[*]{2}[^*]+$"),new RegExp("^[*]{2}[^*]+[*]$"),new RegExp("^[*]{3}.*[^*]$"),
+			var keys=[
+				new RegExp("^[^_]*_$"),new RegExp("^[^_]*_$"),new RegExp("^[^_]*_$"),
+				new RegExp("^[^_]*__$"),new RegExp("^[^_]*__$"),new RegExp("^[^_]*___$"),
+				new RegExp("^[^_]*_[^_]+$"),new RegExp("^[^_]*__[^_]+$"),new RegExp("^[^_]*__[^_]+_$"),new RegExp("^[^_]*___[^_]+$"),new RegExp("^[^_]*___[^_]+_$"),
+				new RegExp("^[^_]*___[^_]+__$"),
+				new RegExp("^[^*]*[*]$"),new RegExp("^[^*]*[*]$"),new RegExp("^[^*]*[*]$"),
+				new RegExp("^[^*]*[*]{2}$"),new RegExp("^[^*]*[*]{2}$"),new RegExp("^[^*]*[*]{3}$"),
+				new RegExp("^[^*]*[*][^*]+$"),new RegExp("^[^*]*[*]{2}[^*]+$"),new RegExp("^[^*]*[*]{2}[^*]+[*]$"),new RegExp("^[^*]*[*]{3}.*[^*]$"),
 				new RegExp("^[*]{3}.*[^*][*]$"),new RegExp("^[*]{3}.*[^*][*]{2}$"),
-				new RegExp("^<s>.+<[/]s$"),new RegExp("^<s>.+[^</]$"),new RegExp("^<s>.+<$"),new RegExp("^<s>.+<[/]$"), new RegExp("^<http:[/][/].+$"),
+				new RegExp("^.*<s>.+<[/]s$"),new RegExp("^.*<s>.+<[/]$"),new RegExp("^.*<s>.+<$"),new RegExp("^.*<s>.*$"),new RegExp("^.*<s$"),new RegExp("^.*<$"),
+				new RegExp("^.*<http:[/][/].*$"),new RegExp("^.*<http:[/]$"),new RegExp("^.*<http:$"),new RegExp("^.*<http$"),new RegExp("^.*<htt$"),
+				new RegExp("^.*<ht$"),new RegExp("^.*<h$"),new RegExp("^.*<$"),
 				//[[img
-				new RegExp("^[[][[]img src=.+ alt=.+\]$"),new RegExp("^[[][[]img src=.+ alt=.+$"),new RegExp("^[[][[]img src=.+ alt$"),new RegExp("^[[][[]img src=.+ al$"),
-				new RegExp("^[[][[]img src=.+ a$"),new RegExp("^[[][[]img src=.+$"),
+				new RegExp("^.*[[][[]img src=.+ alt=.+\]$"),new RegExp("^.*[[][[]img src=.+ alt=.*$"),new RegExp("^.*[[][[]img src=.+ alt$"),new RegExp("^.*[[][[]img src=.+ al$"),
+				new RegExp("^.*[[][[]img src=.+ a$"),new RegExp("^.*[[][[]img src=.*$"),new RegExp("^.*[[][[]img src$"),new RegExp("^.*[[][[]img sr$"),
+				new RegExp("^.*[[][[]img s$"),new RegExp("^.*[[][[]img *$"),new RegExp("^.*[[][[]im$"),new RegExp("^.*[[][[]i$"),
+				new RegExp("^.*[[][[]$"),new RegExp("^.*[[]$"),
 				//[[embed
-				new RegExp("^[[][[]embed url=http://.+\]$"),new RegExp("^[[][[]embed url=http://.+$"),
-				new RegExp("^[[].+\][(]http:[/][/].*\".*\"$"),new RegExp("^[[].+\][(]http:[/][/].*\".*$"),
-				new RegExp("^[[].+\][(]http:[/][/].*$"),new RegExp("^[[].+\][(]http:[/]$"),new RegExp("^[[].+\][(]http:$"),
-				new RegExp("^[[].+\][(]http$"),new RegExp("^[[].+\][(]htt$"),new RegExp("^[[].+\][(]ht$"),
-				new RegExp("^[[].+\][(]h$"),new RegExp("^[[].+\][(]$"),new RegExp("^[[].+\]$"),new RegExp("^[[].+$"),	
-				new RegExp("^[!][[].+\][(]https:[/][/].*\".*\"$"),new RegExp("^[!][[].+\][(]https:[/][/].*\".*$"),
-				new RegExp("^[!][[].+\][(]https:[/][/].*$"),new RegExp("^[!][[].+\][(]https:[/]$"),new RegExp("^[!][[].+\][(]https:$"),
-				new RegExp("^[!][[].+\][(]https$"),new RegExp("^[!][[].+\][(]http$"),new RegExp("^[!][[].+\][(]htt$"),new RegExp("^[!][[].+\][(]ht$"),
-				new RegExp("^[!][[].+\][(]h$"),new RegExp("^[!][[].+\][(]$"),new RegExp("^[!][[].+\]$"),new RegExp("^[!][[].+$")
+				new RegExp("^.*[[][[]embed url=http://.+\]$"),new RegExp("^.*[[][[]embed url=http://.*$"),new RegExp("^.*[[][[]embed url=http:/$"),
+				new RegExp("^.*[[][[]embed url=http:"),new RegExp("^.*[[][[]embed url=http$"),new RegExp("^.*[[][[]embed url=htt$"),new RegExp("^.*[[][[]embed url=ht$"),
+				new RegExp("^.*[[][[]embed url=h$"),new RegExp("^.*[[][[]embed url=$"),new RegExp("^.*[[][[]embed url$"),new RegExp("^.*[[][[]embed ur$"),
+				new RegExp("^.*[[][[]embed u$"),new RegExp("^.*[[][[]embed *$"),new RegExp("^.*[[][[]embe$"),new RegExp("^.*[[][[]emb$"),new RegExp("^.*[[][[]em$"),
+				new RegExp("^.*[[][[]e$"),new RegExp("^.*[[][[]$"),new RegExp("^.*[[]$"),
+				new RegExp("^.*[[].+\][(]http:[/][/].*\".*\"$"),new RegExp("^.*[[].+\][(]http:[/][/].*\".*$"),
+				new RegExp("^.*[[].+\][(]http:[/][/].*$"),new RegExp("^.*[[].+\][(]http:[/]$"),new RegExp("^.*[[].+\][(]http:$"),
+				new RegExp("^.*[[].+\][(]http$"),new RegExp("^.*[[].+\][(]htt$"),new RegExp("^.*[[].+\][(]ht$"),
+				new RegExp("^.*[[].+\][(]h$"),new RegExp("^.*[[].+\][(]$"),new RegExp("^.*[[].+\]$"),new RegExp("^.*[[].*$"),
+				new RegExp("^.*[!][[].+\][(]https:[/][/].*\".*\"$"),new RegExp("^.*[!][[].+\][(]https:[/][/].*\".*$"),
+				new RegExp("^.*[!][[].+\][(]https:[/][/].*$"),new RegExp("^.*[!][[].+\][(]https:[/]$"),new RegExp("^.*[!][[].+\][(]https:$"),
+				new RegExp("^.*[!][[].+\][(]https$"),new RegExp("^.*[!][[].+\][(]http$"),new RegExp("^.*[!][[].+\][(]htt$"),new RegExp("^.*[!][[].+\][(]ht$"),
+				new RegExp("^.*[!][[].+\][(]h$"),new RegExp("^.*[!][[].+\][(]$"),new RegExp("^.*[!][[].+\]$"),new RegExp("^.*[!][[].*$"),
+				new RegExp("^.*[!]$")
 			];
 			
-			var keyActions=["_","__","_","___","__","_",
-				"*","**","*","***",
-				"**","*",
-				">","</s>","/s>","s>",">",
-				"]","]]","=text]]","t=text]]","lt=text]]"," alt=text]]",
-				"]","]]",
+			var keyActions=[
+				"example_","_example__","__example___",
+				"example__","_example___","example___",
+				"_","__","_","___","__","_",
+				"example*","*example**","**example***",
+				"example**","*example***","example***",
+				"*","**","*","***","**","*",
+				">","s>","/s>","</s>","></s>","s></s>",
+				">","/someurl>","//someurl>","://someurl>","p://someurl>","tp://someurl>","ttp://someurl>","http://someurl>",
+				"]","]]","=text]]","t=text]]","lt=text]]"," alt=text]]","=attached-image alt=text]]","c=attached-image alt=text]]",
+				"rc=attached-image alt=text]]"," src=attached-image alt=text]]","g src=attached-image alt=text]]",
+				"mg src=attached-image alt=text]]","img src=attached-image alt=text]]","[img src=attached-image alt=text]]",
+				"]","]]","/www.youtube.com/watch?v=6YbBmqUnoQM]]","//www.youtube.com/watch?v=6YbBmqUnoQM]]","://www.youtube.com/watch?v=6YbBmqUnoQM]]",
+				"p://www.youtube.com/watch?v=6YbBmqUnoQM]]","tp://www.youtube.com/watch?v=6YbBmqUnoQM]]","ttp://www.youtube.com/watch?v=6YbBmqUnoQM]]",
+				"http://www.youtube.com/watch?v=6YbBmqUnoQM]]","=http://www.youtube.com/watch?v=6YbBmqUnoQM]]","l=http://www.youtube.com/watch?v=6YbBmqUnoQM]]",
+				"rl=http://www.youtube.com/watch?v=6YbBmqUnoQM]]"," url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]","d url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]",
+				"ed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]","bed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]","mbed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]",
+				"embed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]","[embed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]",
 				")","\")",
 				" \"hover\")","/example.com/ \"hover\")","//example.com/ \"hover\")",
 				"://example.com/ \"hover\")","p://example.com/ \"hover\")","tp://example.com/ \"hover\")",
@@ -139,8 +166,9 @@ window.onload = function() {
 				")","\")",
 				"\"hover\")","/sourceforge.net/images/icon_linux.gif \"hover\")","//sourceforge.net/images/icon_linux.gif \"hover\")",
 				"://sourceforge.net/images/icon_linux.gif \"hover\")","s://sourceforge.net/images/icon_linux.gif \"hover\")","ps://sourceforge.net/images/icon_linux.gif \"hover\")",
-				"tps://sourceforge.net/images/icon_linux.gif \"hover\")","ttps://sourceforge.net/images/icon_linux.gif \"hover\")","https://sourceforge.net/images/icon_linux.gif) \"hover\"",
-				"(https://sourceforge.net/images/icon_linux.gif \"hover\")","](https://sourceforge.net/images/icon_linux.gif \"hover\")"
+				"tps://sourceforge.net/images/icon_linux.gif \"hover\")","ttps://sourceforge.net/images/icon_linux.gif \"hover\")","https://sourceforge.net/images/icon_linux.gif \"hover\")",
+				"(https://sourceforge.net/images/icon_linux.gif \"hover\")","](https://sourceforge.net/images/icon_linux.gif \"hover\")",
+				"[alternate text](https://sourceforge.net/images/icon_linux.gif \"hover\")"
 			];
 			
 			var keywords = [ "#","##","###","####","#####","######",
@@ -178,7 +206,7 @@ window.onload = function() {
 				if (isNumber(context.line)){ //||context.line==="*"|| context.line==="-"
 					proposals.push({
 						proposal: ". ",
-					description: "i. : it formats line to numbered list"
+						description: "i. : it formats line to numbered list"
 					});
 					found=true;
 					break;
@@ -186,7 +214,7 @@ window.onload = function() {
 				else if (keyword.indexOf(context.line) === 0 && keyword !== context.line) {
 					proposals.push({
 						proposal: keyword.substring(context.line.length),
-					description: keyword+" : "+descs[i]
+						description: keyword+" : "+descs[i]
 					});
 					found=true;
 				}
@@ -196,9 +224,9 @@ window.onload = function() {
 					if (keys[i].test(context.line)){
 						proposals.push({
 							proposal: keyActions[i],
-						description: "REG"
+							description: keyActions[i]
 						});
-						break;
+						//break;
 					}
 				}
 			}
@@ -264,15 +292,4 @@ window.onload = function() {
     // Finally, connect the provider
     provider.connect();
 };
-
-
-
-
-
-
-
-
-
-
-
 
