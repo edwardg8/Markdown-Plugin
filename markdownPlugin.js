@@ -117,27 +117,24 @@ window.onload = function() {
 				new RegExp("^[^*]*[*][^*]+$"),new RegExp("^[^*]*[*]{2}[^*]+$"),new RegExp("^[^*]*[*]{2}[^*]+[*]$"),new RegExp("^[^*]*[*]{3}.*[^*]$"),
 				new RegExp("^[*]{3}.*[^*][*]$"),new RegExp("^[*]{3}.*[^*][*]{2}$"),
 				new RegExp("^.*<s>.+<[/]s$"),new RegExp("^.*<s>.+<[/]$"),new RegExp("^.*<s>.+<$"),new RegExp("^.*<s>.*$"),new RegExp("^.*<s$"),new RegExp("^.*<$"),
-				new RegExp("^.*<http:[/][/].*$"),new RegExp("^.*<http:[/]$"),new RegExp("^.*<http:$"),new RegExp("^.*<http$"),new RegExp("^.*<htt$"),
+				new RegExp("^.*<http:[/][/][^>]*$"),new RegExp("^.*<http:[/]$"),new RegExp("^.*<http:$"),new RegExp("^.*<http$"),new RegExp("^.*<htt$"),
 				new RegExp("^.*<ht$"),new RegExp("^.*<h$"),new RegExp("^.*<$"),
 				//[[img
-				new RegExp("^.*[[][[]img src=.+ alt=.+\]$"),new RegExp("^.*[[][[]img src=.+ alt=.*$"),new RegExp("^.*[[][[]img src=.+ alt$"),new RegExp("^.*[[][[]img src=.+ al$"),
-				new RegExp("^.*[[][[]img src=.+ a$"),new RegExp("^.*[[][[]img src=.*$"),new RegExp("^.*[[][[]img src$"),new RegExp("^.*[[][[]img sr$"),
-				new RegExp("^.*[[][[]img s$"),new RegExp("^.*[[][[]img *$"),new RegExp("^.*[[][[]im$"),new RegExp("^.*[[][[]i$"),
-				new RegExp("^.*[[][[]$"),new RegExp("^.*[[]$"),
+				new RegExp("^[^[]*[[][[]img +src=.+ alt=[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]+\]$"),new RegExp("^[^[]*[[][[]img +src=.+ alt=[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]*$"),
+				new RegExp("^[^[]*[[][[]img +src=.+ alt$"),new RegExp("^[^[]*[[][[]img +src=.+ al$"),new RegExp("^[^[]*[[][[]img +src=.+ a$"),
+				new RegExp("^[^[]*[[][[]img +src=[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]*$"),new RegExp("^[^[]*[[][[]img +src$"),
+				new RegExp("^[^[]*[[][[]img +sr$"),new RegExp("^[^[]*[[][[]img +s$"),new RegExp("^[^[]*[[][[]img *$"),new RegExp("^[^[]*[[][[]im$"),new RegExp("^[^[]*[[][[]i$"),
+				new RegExp("^[^[]*[[][[]$"),new RegExp("^[^[]*[[]$"),
 				//[[embed
-				new RegExp("^.*[[][[]embed url=http://.+\]$"),new RegExp("^.*[[][[]embed url=http://.*$"),new RegExp("^.*[[][[]embed url=http:/$"),
-				new RegExp("^.*[[][[]embed url=http:"),new RegExp("^.*[[][[]embed url=http$"),new RegExp("^.*[[][[]embed url=htt$"),new RegExp("^.*[[][[]embed url=ht$"),
-				new RegExp("^.*[[][[]embed url=h$"),new RegExp("^.*[[][[]embed url=$"),new RegExp("^.*[[][[]embed url$"),new RegExp("^.*[[][[]embed ur$"),
-				new RegExp("^.*[[][[]embed u$"),new RegExp("^.*[[][[]embed *$"),new RegExp("^.*[[][[]embe$"),new RegExp("^.*[[][[]emb$"),new RegExp("^.*[[][[]em$"),
-				new RegExp("^.*[[][[]e$"),new RegExp("^.*[[][[]$"),new RegExp("^.*[[]$"),
-				new RegExp("^.*[[].+\][(]http:[/][/].*\".*\"$"),new RegExp("^.*[[].+\][(]http:[/][/].*\".*$"),
-				new RegExp("^.*[[].+\][(]http:[/][/].*$"),new RegExp("^.*[[].+\][(]http:[/]$"),new RegExp("^.*[[].+\][(]http:$"),
-				new RegExp("^.*[[].+\][(]http$"),new RegExp("^.*[[].+\][(]htt$"),new RegExp("^.*[[].+\][(]ht$"),
-				new RegExp("^.*[[].+\][(]h$"),new RegExp("^.*[[].+\][(]$"),new RegExp("^.*[[].+\]$"),new RegExp("^.*[[].*$"),
-				new RegExp("^.*[!][[].+\][(]https:[/][/].*\".*\"$"),new RegExp("^.*[!][[].+\][(]https:[/][/].*\".*$"),
-				new RegExp("^.*[!][[].+\][(]https:[/][/].*$"),new RegExp("^.*[!][[].+\][(]https:[/]$"),new RegExp("^.*[!][[].+\][(]https:$"),
-				new RegExp("^.*[!][[].+\][(]https$"),new RegExp("^.*[!][[].+\][(]http$"),new RegExp("^.*[!][[].+\][(]htt$"),new RegExp("^.*[!][[].+\][(]ht$"),
-				new RegExp("^.*[!][[].+\][(]h$"),new RegExp("^.*[!][[].+\][(]$"),new RegExp("^.*[!][[].+\]$"),new RegExp("^.*[!][[].*$"),
+				new RegExp("^[^[]*[[][[]embed +url=http://[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]+\]$"),new RegExp("^[^[]*[[][[]embed +url=http://[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]*$"),
+				new RegExp("^[^[]*[[][[]embed +url=http:/$"),new RegExp("^[^[]*[[][[]embed +url=http:$"),new RegExp("^[^[]*[[][[]embed +url=http$"),
+				new RegExp("^[^[]*[[][[]embed +url=htt$"),new RegExp("^[^[]*[[][[]embed +url=ht$"),new RegExp("^[^[]*[[][[]embed +url=h$"),new RegExp("^[^[]*[[][[]embed +url=$"),
+				new RegExp("^[^[]*[[][[]embed +url$"),new RegExp("^[^[]*[[][[]embed +ur$"),new RegExp("^[^[]*[[][[]embed +u$"),new RegExp("^[^[]*[[][[]embed *$"),
+				new RegExp("^[^[]*[[][[]embe$"),new RegExp("^[^[]*[[][[]emb$"),new RegExp("^[^[]*[[][[]em$"),new RegExp("^[^[]*[[][[]e$"),new RegExp("^[^[]*[[][[]$"),new RegExp("^[^[]*[[]$"),
+				new RegExp("^[^[]*[[].+\][(]https?:[/][/].*\".*\"$"),new RegExp("^[^[]*[[].+\][(]https?:[/][/][^\"]*\"[^\")]*$"),
+				new RegExp("^[^[]*[[].+\][(]https?:[/][/][^\")]*$"),new RegExp("^[^[]*[[].+\][(]https?:[/]$"),new RegExp("^[^[]*[[].+\][(]https?:$"),
+				new RegExp("^[^[]*[[].+\][(]https?$"),new RegExp("^[^[]*[[].+\][(]htt$"),new RegExp("^[^[]*[[].+\][(]ht$"),new RegExp("^[^[]*[[].+\][(]h$"),
+				new RegExp("^[^[]*[[].+\][(]$"),new RegExp("^[^[]*[[][A-Za-z0-9!@#$%^&*()+<>//.?=_ -]+\]$"),new RegExp("^[^[]*[[][A-Za-z0-9!@#$%^&*()+<>//.?=_ -]*$"),
 				new RegExp("^.*[!]$")
 			];
 			
@@ -163,12 +160,29 @@ window.onload = function() {
 				" \"hover\")","/example.com/ \"hover\")","//example.com/ \"hover\")",
 				"://example.com/ \"hover\")","p://example.com/ \"hover\")","tp://example.com/ \"hover\")",
 				"ttp://example.com/ \"hover\")","http://example.com/ \"hover\")","(http://example.com/ \"hover\")","](http://example.com/ \"hover\")",
-				")","\")",
-				"\"hover\")","/sourceforge.net/images/icon_linux.gif \"hover\")","//sourceforge.net/images/icon_linux.gif \"hover\")",
-				"://sourceforge.net/images/icon_linux.gif \"hover\")","s://sourceforge.net/images/icon_linux.gif \"hover\")","ps://sourceforge.net/images/icon_linux.gif \"hover\")",
-				"tps://sourceforge.net/images/icon_linux.gif \"hover\")","ttps://sourceforge.net/images/icon_linux.gif \"hover\")","https://sourceforge.net/images/icon_linux.gif \"hover\")",
-				"(https://sourceforge.net/images/icon_linux.gif \"hover\")","](https://sourceforge.net/images/icon_linux.gif \"hover\")",
-				"[alternate text](https://sourceforge.net/images/icon_linux.gif \"hover\")"
+				"[alternate text](https://example.com/ \"hover\")"
+			];
+			
+			var keyDescs=[
+				"Italic for the text \"example\"","Bold for the text \"example\"","Italic and bold for the text \"example\"",
+				"Bold for the text \"example\"","Italic and bold for the text \"example\"","Italic and bold for the text \"example\"",
+				"Italic for the text \"example\"","Bold for the text \"example\"","Italic for the text \"example\"","Italic and bold for the text \"example\"",
+				"Bold for the text \"example\"","Italic for the text \"example\"",
+				"Italic for the text \"example\"","Bold for the text \"example\"","Italic and bold for the text \"example\"",
+				"Bold for the text \"example\"","Italic and bold for the text \"example\"","Italic and bold for the text \"example\"",
+				"Italic for the text \"example\"","Bold for the text \"example\"","Italic for the text \"example\"","Italic and bold for the text \"example\"",
+				"Bold for the text \"example\"","Italic for the text \"example\"",
+				"Strike through text","Strike through text","Strike through text","Strike through text","Strike through text","Strike through text",
+				"Explicit Link","Explicit Link","Explicit Link","Explicit Link","Explicit Link","Explicit Link","Explicit Link","Explicit Link",
+				"Reference an attached image","Reference an attached image","Reference an attached image","Reference an attached image","Reference an attached image",
+				"Reference an attached image","Reference an attached image","Reference an attached image","Reference an attached image","Reference an attached image",
+				"Reference an attached image","Reference an attached image","Reference an attached image","Reference an attached image",
+				"Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video",
+				"Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video",
+				"Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video","Embed a YouTube video",
+				"Insert link or image","Insert link or image","Insert link or image","Insert link or image","Insert link or image","Insert link or image",
+				"Insert link or image","Insert link or image","Insert link or image","Insert link or image","Insert link or image","Insert link or image",
+				"Show an image with a title"
 			];
 			
 			var keywords = [ "#","##","###","####","#####","######",
@@ -224,7 +238,7 @@ window.onload = function() {
 					if (keys[i].test(context.line)){
 						proposals.push({
 							proposal: keyActions[i],
-							description: keyActions[i]
+							description: keyActions[i]+" : "+keyDescs[i]
 						});
 						//break;
 					}
