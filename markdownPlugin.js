@@ -116,13 +116,13 @@ window.onload = function() {
 				new RegExp("^[^*]*[*]{2}$"),new RegExp("^[^*]*[*]{2}$"),new RegExp("^[^*]*[*]{3}$"),
 				new RegExp("^[^*]*[*][^*]+$"),new RegExp("^[^*]*[*]{2}[^*]+$"),new RegExp("^[^*]*[*]{2}[^*]+[*]$"),new RegExp("^[^*]*[*]{3}.*[^*]$"),
 				new RegExp("^[*]{3}.*[^*][*]$"),new RegExp("^[*]{3}.*[^*][*]{2}$"),
-				new RegExp("^.*<s>.+<[/]s$"),new RegExp("^.*<s>.+<[/]$"),new RegExp("^.*<s>.+<$"),new RegExp("^.*<s>.*$"),new RegExp("^.*<s$"),new RegExp("^.*<$"),
+				new RegExp("^.*<s>.+<[/]s$"),new RegExp("^.*<s>.+<[/]$"),new RegExp("^.*<s>.+<$"),new RegExp("^.*<s>((?!</s>).)*$"),new RegExp("^.*<s$"),new RegExp("^.*<$"),
 				new RegExp("^.*<http:[/][/][^>]*$"),new RegExp("^.*<http:[/]$"),new RegExp("^.*<http:$"),new RegExp("^.*<http$"),new RegExp("^.*<htt$"),
 				new RegExp("^.*<ht$"),new RegExp("^.*<h$"),new RegExp("^.*<$"),
 				//[[img
 				new RegExp("^[^[]*[[][[]img +src=.+ alt=[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]+\]$"),new RegExp("^[^[]*[[][[]img +src=.+ alt=[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]*$"),
 				new RegExp("^[^[]*[[][[]img +src=.+ alt$"),new RegExp("^[^[]*[[][[]img +src=.+ al$"),new RegExp("^[^[]*[[][[]img +src=.+ a$"),
-				new RegExp("^[^[]*[[][[]img +src=[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]*$"),new RegExp("^[^[]*[[][[]img +src$"),
+				new RegExp("^[^[]*[[][[]img +src=((?!alt).)*$"),new RegExp("^[^[]*[[][[]img +src$"),
 				new RegExp("^[^[]*[[][[]img +sr$"),new RegExp("^[^[]*[[][[]img +s$"),new RegExp("^[^[]*[[][[]img *$"),new RegExp("^[^[]*[[][[]im$"),new RegExp("^[^[]*[[][[]i$"),
 				new RegExp("^[^[]*[[][[]$"),new RegExp("^[^[]*[[]$"),
 				//[[embed
