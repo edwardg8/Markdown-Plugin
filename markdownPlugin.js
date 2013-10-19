@@ -145,7 +145,7 @@ window.onload = function() {
 				"example*","*example**","**example***",
 				"example**","*example***","example***",
 				"*","**","*","***","**","*",
-				">","s>","/s>","</s>","></s>","s></s>",
+				">","s>","/s>","</s>",">strike through text</s>","s>strike through text</s>",
 				">","/someurl>","//someurl>","://someurl>","p://someurl>","tp://someurl>","ttp://someurl>","http://someurl>",
 				"]","]]","=text]]","t=text]]","lt=text]]"," alt=text]]","=attached-image alt=text]]","c=attached-image alt=text]]",
 				"rc=attached-image alt=text]]"," src=attached-image alt=text]]","g src=attached-image alt=text]]",
@@ -184,6 +184,7 @@ window.onload = function() {
 				"Insert link or image","Insert link or image","Insert link or image","Insert link or image","Insert link or image","Insert link or image",
 				"Show an image with a title"
 			];
+			
 			
 			var keywords = [ "#","##","###","####","#####","######",
 				"* ","+ ", "- ",
@@ -236,11 +237,67 @@ window.onload = function() {
 			if (!found){
 				for (var i=0; i<keys.length; i++){
 					if (keys[i].test(context.line)){
-						proposals.push({
-							proposal: keyActions[i],
-							description: keyActions[i]+" : "+keyDescs[i]
-						});
-						//break;
+						if (i>=27 && i<=29){
+							var re1 = /</;
+							var re2 =/>/;
+							var prefixStart=offset;
+							var ind=2-(context.line.length-1-re1.exec(context.line).index);
+							var len;
+							if (context.line.match(re2)===null)
+								len=19;
+							else
+								len=context.line.length-1-re2.exec(context.line).index;
+							proposals.push({
+								proposal: keyActions[i],
+								description: "test: ind "+ind+" len "+len,
+								positions: [{offset: prefixStart + ind, length: len}],
+								escapePosition:prefixStart+ind+len
+							});
+						}
+						else if (i>=30 && i<=37){
+							var re1 = /</;
+							var re2 =/<http:[/][/]/;
+							var prefixStart=offset;
+							var ind=7-(context.line.length-1-re1.exec(context.line).index);
+							var len;
+							if (context.line.match(re2)===null)
+								len=7;
+							else
+								len=context.line.length-1-re2.exec(context.line).index-7;
+							proposals.push({
+								proposal: keyActions[i],
+								description: "test: ind "+ind+" len "+len,
+								positions: [{offset: prefixStart + ind, length: len}],
+								escapePosition:prefixStart+ind+len
+							});
+						}
+						else if (i>=52 && i<=70){
+							var re1 = /[[]/;
+							var re2 =/[[][[]embed +url=http:[/][/]/;
+							var re3 =/[[][[]embed +$/;
+							var prefixStart=offset;
+							var ind=18-(context.line.length-1-re1.exec(context.line).index);
+							var len;
+							if (context.line.match(re3)!==null){
+								len=35;
+								ind+=1;
+							}
+							else if (context.line.match(re2)===null)
+								len=35;
+							else
+								len=context.line.length-1-re2.exec(context.line).index-18;
+							proposals.push({
+								proposal: keyActions[i],
+								description: "test: ind "+ind+" len "+len+" i "+i,
+								positions: [{offset: prefixStart + ind, length: len}],
+								escapePosition:prefixStart+ind+len
+							});
+						}
+						else
+							proposals.push({
+								proposal: keyActions[i],
+								description: keyActions[i]+" : "+keyDescs[i]
+							});
 					}
 				}
 			}
