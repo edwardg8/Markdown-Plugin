@@ -275,12 +275,14 @@ window.onload = function() {
 							var re1 = /[[]/;
 							var re2 =/[[][[]embed +url=http:[/][/]/;
 							var re3 =/[[][[]embed +$/;
+							var numOfSpace=0;
 							var prefixStart=offset;
 							var ind=18-(context.line.length-1-re1.exec(context.line).index);
 							var len;
 							if (context.line.match(re3)!==null){
 								len=35;
-								ind+=1;
+								numOfSpace=context.line.length-context.line.indexOf("embed")-5;
+								ind+=numOfSpace;
 							}
 							else if (context.line.match(re2)===null)
 								len=35;
@@ -288,7 +290,7 @@ window.onload = function() {
 								len=context.line.length-1-re2.exec(context.line).index-18;
 							proposals.push({
 								proposal: keyActions[i],
-								description: "test: ind "+ind+" len "+len+" i "+i,
+								description: "test: ind "+ind+" len "+len+" i "+i+" space "+numOfSpace,
 								positions: [{offset: prefixStart + ind, length: len}],
 								escapePosition:prefixStart+ind+len
 							});
