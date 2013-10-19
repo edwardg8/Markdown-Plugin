@@ -275,19 +275,30 @@ window.onload = function() {
 							var re1 = /[[]/;
 							var re2 =/[[][[]embed +url=http:[/][/]/;
 							var re3 =/[[][[]embed +$/;
+							var re4 =/[[][[]embed +u/;
 							var numOfSpace=0;
 							var prefixStart=offset;
 							var ind=18-(context.line.length-1-re1.exec(context.line).index);
 							var len;
+							
 							if (context.line.match(re3)!==null){
-								len=35;
 								numOfSpace=context.line.length-context.line.indexOf("embed")-5;
-								ind+=numOfSpace;
 							}
-							else if (context.line.match(re2)===null)
+							if (context.line.match(re4)!==null){
+								var j;
+								for ( j=context.line.indexOf("embed")+5;j<context.line.length; j++)
+									if (context.line.charAt(j)==='u')
+										break;
+								numOfSpace=j-context.line.indexOf("embed")-6;
+							}
+							
+							ind+=numOfSpace;
+							
+							if (context.line.match(re2)===null)
 								len=35;
 							else
-								len=context.line.length-1-re2.exec(context.line).index-18;
+								len=context.line.length-1-re2.exec(context.line).index-18-numOfSpace;
+								
 							proposals.push({
 								proposal: keyActions[i],
 								description: "test: ind "+ind+" len "+len+" i "+i+" space "+numOfSpace,
