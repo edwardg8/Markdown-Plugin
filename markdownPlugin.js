@@ -227,11 +227,26 @@ window.onload = function() {
 					break;
 				}
 				else if (keyword.indexOf(context.line) === 0 && keyword !== context.line) {
-					proposals.push({
-						proposal: keyword.substring(context.line.length),
-						description: keyword+" : "+descs[i]
-					});
 					found=true;
+					if (i===19){
+						var prefixStart=offset;
+						var ind=3-context.line.length;
+						var len=27;
+						if (context.line.index>=3)
+							len=keyword.length-1-context.line.length;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							//description: keyActions[i]+" : "+keyDescs[i],
+							description: "test: ind "+ind+" len "+len+" i "+i,
+							positions: [{offset: prefixStart + ind, length: len}],
+							escapePosition:prefixStart+ind+len
+						});
+					}
+					else
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i]
+						});
 				}
 			}
 			if (!found){
@@ -249,7 +264,7 @@ window.onload = function() {
 								len=context.line.length-1-re2.exec(context.line).index;
 							proposals.push({
 								proposal: keyActions[i],
-								description: "test: ind "+ind+" len "+len,
+								description: keyActions[i]+" : "+keyDescs[i],
 								positions: [{offset: prefixStart + ind, length: len}],
 								escapePosition:prefixStart+ind+len
 							});
@@ -266,7 +281,7 @@ window.onload = function() {
 								len=context.line.length-1-re2.exec(context.line).index-7;
 							proposals.push({
 								proposal: keyActions[i],
-								description: "test: ind "+ind+" len "+len,
+								description: keyActions[i]+" : "+keyDescs[i],
 								positions: [{offset: prefixStart + ind, length: len}],
 								escapePosition:prefixStart+ind+len
 							});
@@ -301,7 +316,8 @@ window.onload = function() {
 								
 							proposals.push({
 								proposal: keyActions[i],
-								description: "test: ind "+ind+" len "+len+" i "+i+" space "+numOfSpace,
+								//description: "test: ind "+ind+" len "+len+" i "+i+" space "+numOfSpace,
+								description: keyActions[i]+" : "+keyDescs[i],
 								positions: [{offset: prefixStart + ind, length: len}],
 								escapePosition:prefixStart+ind+len
 							});
