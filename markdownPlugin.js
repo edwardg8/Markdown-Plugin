@@ -236,6 +236,20 @@ window.onload = function() {
 							len=keyword.length-1-context.line.length;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i],
+							positions: [{offset: prefixStart + ind, length: len}],
+							escapePosition:prefixStart+ind+len
+						});
+					}
+
+					else if (i===25){
+						var prefixStart=offset;
+						var ind=8-context.line.length;
+						var len=7;
+						if (context.line.index>=8)
+							len=keyword.length-1-context.line.length;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
 							//description: keyActions[i]+" : "+keyDescs[i],
 							description: "test: ind "+ind+" len "+len+" i "+i,
 							positions: [{offset: prefixStart + ind, length: len}],
@@ -249,6 +263,8 @@ window.onload = function() {
 						});
 				}
 			}
+			
+			
 			if (!found){
 				for (var i=0; i<keys.length; i++){
 					if (keys[i].test(context.line)){
