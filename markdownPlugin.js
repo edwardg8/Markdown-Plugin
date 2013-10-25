@@ -194,8 +194,8 @@ window.onload = function() {
 				"*example*","**example**","***example***",
 				"<s>this is strike through text</s>",
 				">",">>",">>>",">>>>",">>>>>",
-				"<http://someurl>","[text to link](http://example.com/)","[like this](http://someurl \"this title shows up when you hover\")",
-				"![alternate text](https://sourceforge.net/images/icon_linux.gif)","![tiny arrow](https://sourceforge.net/images/icon_linux.gif \"tiny arrow\")",
+				"<http://someurl>","[text to link](http://example.com/)","[text to link](http://example.com/ \"this title shows up when you hover\")",
+				"![alternate text](https://sourceforge.net/images/icon_linux.gif)","![alternate text](https://sourceforge.net/images/icon_linux.gif \"tiny arrow\")",
 				"[[img src=attached-image.jpg alt=foobar]]","[[embed url=http://www.youtube.com/watch?v=6YbBmqUnoQM]]",
 				"[[include ref=SamplePage]]"
 			];
@@ -228,12 +228,12 @@ window.onload = function() {
 				}
 				else if (keyword.indexOf(context.line) === 0 && keyword !== context.line) {
 					found=true;
+					var skip=200;
+					
 					if (i===19){
 						var prefixStart=offset;
 						var ind=3-context.line.length;
 						var len=27;
-						if (context.line.index>=3)
-							len=keyword.length-1-context.line.length;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -241,19 +241,109 @@ window.onload = function() {
 							escapePosition:prefixStart+ind+len
 						});
 					}
-
 					else if (i===25){
 						var prefixStart=offset;
 						var ind=8-context.line.length;
 						var len=7;
-						if (context.line.index>=8)
-							len=keyword.length-1-context.line.length;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
-							//description: keyActions[i]+" : "+keyDescs[i],
-							description: "test: ind "+ind+" len "+len+" i "+i,
+							description: keyword+" : "+descs[i],
 							positions: [{offset: prefixStart + ind, length: len}],
 							escapePosition:prefixStart+ind+len
+						});
+					}
+					else if (i===26){
+						var prefixStart=offset;
+						var ind=1-context.line.length;
+						var len1=12;
+						var position=offset+22-context.line.length;
+						var len2=12;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i],
+							positions: [{offset: prefixStart + ind, length: len1},{offset: position, length: len2}],
+							escapePosition:offset+skip
+						});
+					}
+					else if (i===27){
+						var prefixStart=offset;
+						var ind=1-context.line.length;
+						var len1=12;
+						var position2=offset+22-context.line.length;
+						var len2=12;
+						var position3=offset+36-context.line.length;
+						var len3=34;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i],
+							positions: [{offset: prefixStart + ind, length: len1},{offset: position2, length: len2},
+								{offset: position3, length: len3}],
+							escapePosition:offset+skip
+						});
+					}
+					else if (i===28){
+						var prefixStart=offset;
+						var ind=2-context.line.length;
+						var len1=14;
+						var position2=offset+26-context.line.length;
+						var len2=37;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i],
+							positions: [{offset: prefixStart + ind, length: len1},{offset: position2, length: len2}],
+							escapePosition:offset+skip
+						});
+					}
+					else if (i===29){
+						var prefixStart=offset;
+						var ind=2-context.line.length;
+						var len1=14;
+						var position2=offset+26-context.line.length;
+						var len2=37;
+						var position3=offset+65-context.line.length;
+						var len3=10;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i],
+							positions: [{offset: prefixStart + ind, length: len1},{offset: position2, length: len2},
+								{offset: position3, length: len3}],
+							escapePosition:offset+skip
+						});
+					}
+					else if (i===30){
+						var prefixStart=offset;
+						var ind=10-context.line.length;
+						var len1=18;
+						var position2=offset+33-context.line.length;
+						var len2=6;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i],
+							positions: [{offset: prefixStart + ind, length: len1},{offset: position2, length: len2}],
+							escapePosition:offset+skip
+						});
+					}
+					else if (i===31){
+						var prefixStart=offset;
+						var ind=19-context.line.length;
+						var len1=35;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i],
+							positions: [{offset: prefixStart + ind, length: len1}],
+							escapePosition:prefixStart+ind+len1
+							
+						});
+					}
+					else if (i===32){
+						var prefixStart=offset;
+						var ind=14-context.line.length;
+						var len1=10;
+						proposals.push({
+							proposal: keyword.substring(context.line.length),
+							description: keyword+" : "+descs[i],
+							positions: [{offset: prefixStart + ind, length: len1}],
+							escapePosition:prefixStart+ind+len1
 						});
 					}
 					else
