@@ -469,7 +469,7 @@ window.onload = function() {
 							});
 						}
 						
-						//[alternate text](https//example.com/ \"hover\")
+						//[alternate text](http://example.com/ \"hover\")
 						else if (i>=72 && i<=82){
 							var prefixStart=offset;
 							var ind=-(context.line.length-1-context.line.indexOf("["));
@@ -510,6 +510,15 @@ window.onload = function() {
 								description: keyActions[i]+" : "+keyDescs[i],
 								positions: [{offset: prefixStart + ind, length: len},{offset: position2, length: len2},
 								{offset: position3, length: len3}],
+								escapePosition:offset+skip
+							});
+						}
+						else if (i===83){
+							proposals.push({
+								proposal: keyActions[i],
+								description: keyActions[i]+" : "+keyDescs[i],
+								positions: [{offset: offset+1, length: 14},{offset: offset+25, length: 12},
+									{offset:  offset+39, length: 5}],
 								escapePosition:offset+skip
 							});
 						}
