@@ -216,6 +216,7 @@ window.onload = function() {
 			var proposals = [];
 			
 			var found=false;
+			var skip=200;
 			for (var i=0; i < keywords.length; i++) {
 				var keyword = keywords[i];
 				if (isNumber(context.line)){ //||context.line==="*"|| context.line==="-"
@@ -228,7 +229,6 @@ window.onload = function() {
 				}
 				else if (keyword.indexOf(context.line) === 0 && keyword !== context.line) {
 					found=true;
-					var skip=200;
 					
 					if (i===19){
 						var prefixStart=offset;
@@ -363,10 +363,8 @@ window.onload = function() {
 							var re2 =/>/;
 							var prefixStart=offset;
 							var ind=2-(context.line.length-1-re1.exec(context.line).index);
-							var len;
-							if (context.line.match(re2)===null)
-								len=19;
-							else
+							var len=19;
+							if (context.line.match(re2)!==null)
 								len=context.line.length-1-re2.exec(context.line).index;
 							proposals.push({
 								proposal: keyActions[i],
@@ -380,16 +378,62 @@ window.onload = function() {
 							var re2 =/<http:[/][/]/;
 							var prefixStart=offset;
 							var ind=7-(context.line.length-1-re1.exec(context.line).index);
-							var len;
-							if (context.line.match(re2)===null)
-								len=7;
-							else
+							var len=7;
+							if (context.line.match(re2)!==null)
 								len=context.line.length-1-re2.exec(context.line).index-7;
 							proposals.push({
 								proposal: keyActions[i],
 								description: keyActions[i]+" : "+keyDescs[i],
 								positions: [{offset: prefixStart + ind, length: len}],
 								escapePosition:prefixStart+ind+len
+							});
+						}
+						//[[img src=attached-image alt=text]]
+						else if (i>=39 && i<=51){
+							var re1 = /[[]/;
+							var re2 =/[[][[]img +src=/;
+							var re3 =/[[][[]img +$/;
+							var re4 =/[[][[]img +s/;
+							var numOfSpace=0;
+							var prefixStart=offset;
+							var ind=9-(context.line.length-1-re1.exec(context.line).index);
+							var len=14;
+							var position2;
+							var len2=4;
+							
+							if (context.line.match(re3)!==null){
+								numOfSpace=context.line.length-context.line.indexOf("img")-3;
+							}
+							if (context.line.match(re4)!==null){
+								var j;
+								for ( j=context.line.indexOf("img")+3;j<context.line.length; j++)
+									if (context.line.charAt(j)==='s')
+										break;
+								numOfSpace=j-context.line.indexOf("img")-4;
+							}
+							ind+=numOfSpace;
+							
+							if (context.line.indexOf(" a")!==-1){
+								len=context.line.indexOf(" a")-1-re2.exec(context.line).index-9-numOfSpace;
+								position2=offset+4-(context.line.length-1-context.line.indexOf(" a"));
+								if (context.line.indexOf(" alt=")!==-1)
+									len2=context.line.length-1-context.line.indexOf(" a")-4;
+								
+							}
+							else{
+								if (context.line.match(re2)!==null){
+									len=context.line.length-1-re2.exec(context.line).index-9-numOfSpace;
+									position2=offset+5;
+								}
+								else
+									position2=offset+ind+len+5;
+							}
+								
+							proposals.push({
+								proposal: keyActions[i],
+								description: keyActions[i]+" : "+keyDescs[i],
+								positions: [{offset: prefixStart + ind, length: len},{offset: position2, length: len2}],
+								escapePosition:offset+skip
 							});
 						}
 						else if (i>=52 && i<=70){
@@ -400,7 +444,7 @@ window.onload = function() {
 							var numOfSpace=0;
 							var prefixStart=offset;
 							var ind=18-(context.line.length-1-re1.exec(context.line).index);
-							var len;
+							var len=35;
 							
 							if (context.line.match(re3)!==null){
 								numOfSpace=context.line.length-context.line.indexOf("embed")-5;
@@ -412,20 +456,61 @@ window.onload = function() {
 										break;
 								numOfSpace=j-context.line.indexOf("embed")-6;
 							}
-							
 							ind+=numOfSpace;
 							
-							if (context.line.match(re2)===null)
-								len=35;
-							else
+							if (context.line.match(re2)!==null)
 								len=context.line.length-1-re2.exec(context.line).index-18-numOfSpace;
 								
 							proposals.push({
 								proposal: keyActions[i],
-								//description: "test: ind "+ind+" len "+len+" i "+i+" space "+numOfSpace,
 								description: keyActions[i]+" : "+keyDescs[i],
 								positions: [{offset: prefixStart + ind, length: len}],
 								escapePosition:prefixStart+ind+len
+							});
+						}
+						
+						//[alternate text](https//example.com/ \"hover\")
+						else if (i>=72 && i<=82){
+							var prefixStart=offset;
+							var ind=-(context.line.length-1-context.line.indexOf("["));
+							var len=0;
+							var position2;
+							var len2=12;
+							var position3;
+							var len3=5;
+							
+							if (context.line.indexOf(" \"")!==-1){
+								len=context.line.indexOf("]")-context.line.indexOf("[")-1;
+								position2=offset-(context.line.length-context.line.indexOf("](http://")-9);
+								len2=context.line.indexOf(" \"")-context.line.indexOf("](http://")-9;								
+								position3=offset-(context.line.length-2-context.line.indexOf(" \""));
+								len3=context.line.length-2-context.line.indexOf(" \"");
+								
+							}
+							else if (context.line.indexOf("]")!==-1){
+								len=context.line.indexOf("]")-context.line.indexOf("[")-1;
+								if  (context.line.indexOf("](http://")!==-1){
+									len2=context.line.length-context.line.indexOf("]")-9;	
+									position2=offset-len2;
+									position3=offset+2;
+								}
+								else{
+									position2=offset+9-(context.line.length-context.line.indexOf("]"));
+									position3=position2+len2+2;
+								}
+							}
+							else{
+								len=context.line.length-1-context.line.indexOf("[");
+								position2=prefixStart+ind+len+9;
+								position3=position2+len2+2;
+							}
+							
+							proposals.push({
+								proposal: keyActions[i],
+								description: keyActions[i]+" : "+keyDescs[i],
+								positions: [{offset: prefixStart + ind, length: len},{offset: position2, length: len2},
+								{offset: position3, length: len3}],
+								escapePosition:offset+skip
 							});
 						}
 						else
