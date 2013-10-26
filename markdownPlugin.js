@@ -122,7 +122,7 @@ window.onload = function() {
 				//[[img
 				new RegExp("^[^[]*[[][[]img +src=.+ alt=[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]+\]$"),new RegExp("^[^[]*[[][[]img +src=.+ alt=[A-Za-z0-9!@#$%^&*()+<>//.?=_ -]*$"),
 				new RegExp("^[^[]*[[][[]img +src=.+ alt$"),new RegExp("^[^[]*[[][[]img +src=.+ al$"),new RegExp("^[^[]*[[][[]img +src=.+ a$"),
-				new RegExp("^[^[]*[[][[]img +src=((?! alt).)*$"),new RegExp("^[^[]*[[][[]img +src$"),
+				new RegExp("^[^[]*[[][[]img +src=((?!alt).)*$"),new RegExp("^[^[]*[[][[]img +src$"),
 				new RegExp("^[^[]*[[][[]img +sr$"),new RegExp("^[^[]*[[][[]img +s$"),new RegExp("^[^[]*[[][[]img *$"),new RegExp("^[^[]*[[][[]im$"),new RegExp("^[^[]*[[][[]i$"),
 				new RegExp("^[^[]*[[][[]$"),new RegExp("^[^[]*[[]$"),
 				//[[embed
