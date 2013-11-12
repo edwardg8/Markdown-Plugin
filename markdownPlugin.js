@@ -1,14 +1,16 @@
-/**
- * An Orion plugin that extends the editor in 4 ways for the benefit of Markdown editing.
- * The first part is associating the Markdown file extension which includes an icon.
- * The second is a command extension that converts the selection to and from a Markdown List.
- * The third is a content assist extension that provides either an example document or a link as the two completion paths.
- * The forth is a highlighter extension that provides some very simple syntax highlighting for Markdown text.
- */
+/*******************************************************************************
+ * @license
+ * Copyright (c) 2011, 2013 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials are made 
+ * available under the terms of the Eclipse Public License v1.0 
+ * (http://www.eclipse.org/legal/epl-v10.html), and the Eclipse Distribution 
+ * License v1.0 (http://www.eclipse.org/org/documents/edl-v10.html). 
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *******************************************************************************/
 
-// The following comment tells JSLint which variables are globals thus removing the errors.
 /*global orion window */
-
 window.onload = function() {
 
     // create the Markdown List plugin headers
@@ -21,26 +23,14 @@ window.onload = function() {
     // Create the provider based on the headers
     var provider = new orion.PluginProvider(headers);
 
-    //===================================== PART 1 ============================================================
-    /**
-     * The first part is associating the Markdown file extension which includes an icon.
-     */
-
     // Register the content type for all known extensions and the id for Markdown.
     provider.registerServiceProvider("orion.file.contenttype", {}, {
         contentTypes: [{
             id: "text/x-markdown",
             name: "Markdown",
-            extension: ["md", "markdown", "mdown", "mkd", "mkdn"],
-            image: "http://localhost:8080/file/tutorial/OrionTutorial/solutions/exercise-2/lib/MarkdownSolid.png"
+            extension: ["md", "markdown", "mdown", "mkd", "mkdn"]
         }]
     });
-
-
-    //===================================== PART 2 ============================================================
-    /**
-     * The second is a command extension that converts the selection to and from a Markdown List
-     */
 
     /**
      * A helper function that converts lines of markdown text into a list. If the lines are already
@@ -91,7 +81,7 @@ window.onload = function() {
 
     // Create the service properties including a hotkey to convert selection to/from a list    
     var serviceProps = {
-        name: "Convert to Markdown List",
+        name: "MDList",
         key: ["l", true, true],
         contentType: ["text/x-markdown"]
     };
@@ -201,23 +191,25 @@ window.onload = function() {
 			];
 				
 	        var descs=["First level heading","Second level heading","Third level heading","Fourth level heading","Fifth level heading","Sith level heading",
-	        	"List","List","List",
-	        	"Huge header","Below a title-smaller header; Below a blank-horizontal line",
-	        	"Horizontal Line","Horizontal Line",
-	        	"Italic for the text \"example\"","Bold for the text \"example\"","Italic and bold for the text \"example\"",
-	        	"Italic for the text \"example\"","Bold for the text \"example\"","Italic and bold for the text \"example\"",
-	        	"Strike through text",
-	        	"Indentation: One tab","Indentation: Two tabs","Indentation: Three tabs","Indentation: Four tabs","Indentation: Five tabs",
-	        	"Explicit Link", "Link", "Link: show link when hover",
-	        	"Show an image","Show an image with a title",
-	        	"Reference an attached image","Embed a YouTube video",
-	        	"Embed another wiki page"
+				"List","List","List",
+				"Huge header","Below a title-smaller header; Below a blank-horizontal line",
+				"Horizontal Line","Horizontal Line",
+				"Italic for the text \"example\"","Bold for the text \"example\"","Italic and bold for the text \"example\"",
+				"Italic for the text \"example\"","Bold for the text \"example\"","Italic and bold for the text \"example\"",
+				"Strike through text",
+				"Indentation: One tab","Indentation: Two tabs","Indentation: Three tabs","Indentation: Four tabs","Indentation: Five tabs",
+				"Explicit Link", "Link", "Link: show link when hover",
+				"Show an image","Show an image with a title",
+				"Reference an attached image","Embed a YouTube video",
+				"Embed another wiki page"
 	        ];
 			var proposals = [];
 			
 			var found=false;
 			var skip=200;
-			for (var i=0; i < keywords.length; i++) {
+			var prefixStart,ind,len,len1,len2,len3,position,position2,position3;
+			var i;
+			for (i=0; i < keywords.length; i++) {
 				var keyword = keywords[i];
 				if (isNumber(context.line)){ //||context.line==="*"|| context.line==="-"
 					proposals.push({
@@ -229,11 +221,10 @@ window.onload = function() {
 				}
 				else if (keyword.indexOf(context.line) === 0 && keyword !== context.line) {
 					found=true;
-					
+					prefixStart=offset;
 					if (i===19){
-						var prefixStart=offset;
-						var ind=3-context.line.length;
-						var len=27;
+						ind=3-context.line.length;
+						len=27;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -242,9 +233,8 @@ window.onload = function() {
 						});
 					}
 					else if (i===25){
-						var prefixStart=offset;
-						var ind=8-context.line.length;
-						var len=7;
+						ind=8-context.line.length;
+						len=7;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -253,11 +243,10 @@ window.onload = function() {
 						});
 					}
 					else if (i===26){
-						var prefixStart=offset;
-						var ind=1-context.line.length;
-						var len1=12;
-						var position=offset+22-context.line.length;
-						var len2=12;
+						ind=1-context.line.length;
+						len1=12;
+						position=offset+22-context.line.length;
+						len2=12;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -266,13 +255,12 @@ window.onload = function() {
 						});
 					}
 					else if (i===27){
-						var prefixStart=offset;
-						var ind=1-context.line.length;
-						var len1=12;
-						var position2=offset+22-context.line.length;
-						var len2=12;
-						var position3=offset+36-context.line.length;
-						var len3=34;
+						ind=1-context.line.length;
+						len1=12;
+						position2=offset+22-context.line.length;
+						len2=12;
+						position3=offset+36-context.line.length;
+						len3=34;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -282,11 +270,10 @@ window.onload = function() {
 						});
 					}
 					else if (i===28){
-						var prefixStart=offset;
-						var ind=2-context.line.length;
-						var len1=14;
-						var position2=offset+26-context.line.length;
-						var len2=37;
+						ind=2-context.line.length;
+						len1=14;
+						position2=offset+26-context.line.length;
+						len2=37;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -295,13 +282,12 @@ window.onload = function() {
 						});
 					}
 					else if (i===29){
-						var prefixStart=offset;
-						var ind=2-context.line.length;
-						var len1=14;
-						var position2=offset+26-context.line.length;
-						var len2=37;
-						var position3=offset+65-context.line.length;
-						var len3=10;
+						ind=2-context.line.length;
+						len1=14;
+						position2=offset+26-context.line.length;
+						len2=37;
+						position3=offset+65-context.line.length;
+						len3=10;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -311,11 +297,10 @@ window.onload = function() {
 						});
 					}
 					else if (i===30){
-						var prefixStart=offset;
-						var ind=10-context.line.length;
-						var len1=18;
-						var position2=offset+33-context.line.length;
-						var len2=6;
+						ind=10-context.line.length;
+						len1=18;
+						position2=offset+33-context.line.length;
+						len2=6;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -324,9 +309,8 @@ window.onload = function() {
 						});
 					}
 					else if (i===31){
-						var prefixStart=offset;
-						var ind=19-context.line.length;
-						var len1=35;
+						ind=19-context.line.length;
+						len1=35;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -336,9 +320,8 @@ window.onload = function() {
 						});
 					}
 					else if (i===32){
-						var prefixStart=offset;
-						var ind=14-context.line.length;
-						var len1=10;
+						ind=14-context.line.length;
+						len1=10;
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i],
@@ -346,26 +329,29 @@ window.onload = function() {
 							escapePosition:prefixStart+ind+len1
 						});
 					}
-					else
+					else{
 						proposals.push({
 							proposal: keyword.substring(context.line.length),
 							description: keyword+" : "+descs[i]
 						});
+					}
 				}
 			}
 			
 			
 			if (!found){
-				for (var i=0; i<keys.length; i++){
+				for (i=0; i<keys.length; i++){
 					if (keys[i].test(context.line)){
+						var re1,re2,re3,re4,numOfSpace,j;
 						if (i>=27 && i<=29){
-							var re1 = /</;
-							var re2 =/>/;
-							var prefixStart=offset;
-							var ind=2-(context.line.length-1-re1.exec(context.line).index);
-							var len=19;
-							if (context.line.match(re2)!==null)
+							re1 = /</;
+							re2 =/>/;
+							prefixStart=offset;
+							ind=2-(context.line.length-1-re1.exec(context.line).index);
+							len=19;
+							if (context.line.match(re2)!==null){
 								len=context.line.length-1-re2.exec(context.line).index;
+							}
 							proposals.push({
 								proposal: keyActions[i],
 								description: keyActions[i]+" : "+keyDescs[i],
@@ -374,13 +360,14 @@ window.onload = function() {
 							});
 						}
 						else if (i>=30 && i<=37){
-							var re1 = /</;
-							var re2 =/<http:[/][/]/;
-							var prefixStart=offset;
-							var ind=7-(context.line.length-1-re1.exec(context.line).index);
-							var len=7;
-							if (context.line.match(re2)!==null)
+							re1 = /</;
+							re2 =/<http:[/][/]/;
+							prefixStart=offset;
+							ind=7-(context.line.length-1-re1.exec(context.line).index);
+							len=7;
+							if (context.line.match(re2)!==null){
 								len=context.line.length-1-re2.exec(context.line).index-7;
+							}
 							proposals.push({
 								proposal: keyActions[i],
 								description: keyActions[i]+" : "+keyDescs[i],
@@ -390,25 +377,23 @@ window.onload = function() {
 						}
 						//[[img src=attached-image alt=text]]
 						else if (i>=39 && i<=51){
-							var re1 = /[[]/;
-							var re2 =/[[][[]img +src=/;
-							var re3 =/[[][[]img +$/;
-							var re4 =/[[][[]img +s/;
-							var numOfSpace=0;
-							var prefixStart=offset;
-							var ind=9-(context.line.length-1-re1.exec(context.line).index);
-							var len=14;
-							var position2;
-							var len2=4;
+							re1 = /[[]/;
+							re2 =/[[][[]img +src=/;
+							re3 =/[[][[]img +$/;
+							re4 =/[[][[]img +s/;
+							numOfSpace=0;
+							prefixStart=offset;
+							ind=9-(context.line.length-1-re1.exec(context.line).index);
+							len=14;
+							len2=4;
 							
 							if (context.line.match(re3)!==null){
 								numOfSpace=context.line.length-context.line.indexOf("img")-3;
 							}
 							if (context.line.match(re4)!==null){
-								var j;
-								for ( j=context.line.indexOf("img")+3;j<context.line.length; j++)
-									if (context.line.charAt(j)==='s')
-										break;
+								for ( j=context.line.indexOf("img")+3;j<context.line.length; j++){
+									if (context.line.charAt(j)==='s') {break;}
+								}
 								numOfSpace=j-context.line.indexOf("img")-4;
 							}
 							ind+=numOfSpace;
@@ -416,8 +401,9 @@ window.onload = function() {
 							if (context.line.indexOf(" a")!==-1){
 								len=context.line.indexOf(" a")-1-re2.exec(context.line).index-9-numOfSpace;
 								position2=offset+4-(context.line.length-1-context.line.indexOf(" a"));
-								if (context.line.indexOf(" alt=")!==-1)
+								if (context.line.indexOf(" alt=")!==-1){
 									len2=context.line.length-1-context.line.indexOf(" a")-4;
+								}
 								
 							}
 							else{
@@ -425,8 +411,9 @@ window.onload = function() {
 									len=context.line.length-1-re2.exec(context.line).index-9-numOfSpace;
 									position2=offset+5;
 								}
-								else
+								else{
 									position2=offset+ind+len+5;
+								}
 							}
 								
 							proposals.push({
@@ -437,29 +424,29 @@ window.onload = function() {
 							});
 						}
 						else if (i>=52 && i<=70){
-							var re1 = /[[]/;
-							var re2 =/[[][[]embed +url=http:[/][/]/;
-							var re3 =/[[][[]embed +$/;
-							var re4 =/[[][[]embed +u/;
-							var numOfSpace=0;
-							var prefixStart=offset;
-							var ind=18-(context.line.length-1-re1.exec(context.line).index);
-							var len=35;
+							re1 = /[[]/;
+							re2 =/[[][[]embed +url=http:[/][/]/;
+							re3 =/[[][[]embed +$/;
+							re4 =/[[][[]embed +u/;
+							numOfSpace=0;
+							prefixStart=offset;
+							ind=18-(context.line.length-1-re1.exec(context.line).index);
+							len=35;
 							
 							if (context.line.match(re3)!==null){
 								numOfSpace=context.line.length-context.line.indexOf("embed")-5;
 							}
 							if (context.line.match(re4)!==null){
-								var j;
-								for ( j=context.line.indexOf("embed")+5;j<context.line.length; j++)
-									if (context.line.charAt(j)==='u')
-										break;
+								for ( j=context.line.indexOf("embed")+5;j<context.line.length; j++){
+									if (context.line.charAt(j)==='u') {break;}
+								}
 								numOfSpace=j-context.line.indexOf("embed")-6;
 							}
 							ind+=numOfSpace;
 							
-							if (context.line.match(re2)!==null)
+							if (context.line.match(re2)!==null){
 								len=context.line.length-1-re2.exec(context.line).index-18-numOfSpace;
+							}
 								
 							proposals.push({
 								proposal: keyActions[i],
@@ -471,13 +458,11 @@ window.onload = function() {
 						
 						//[alternate text](http://example.com/ \"hover\")
 						else if (i>=72 && i<=82){
-							var prefixStart=offset;
-							var ind=-(context.line.length-1-context.line.indexOf("["));
-							var len=0;
-							var position2;
-							var len2=12;
-							var position3;
-							var len3=5;
+							prefixStart=offset;
+							ind=-(context.line.length-1-context.line.indexOf("["));
+							len=0;
+							len2=12;
+							len3=5;
 							
 							if (context.line.indexOf(" \"")!==-1){
 								len=context.line.indexOf("]")-context.line.indexOf("[")-1;
@@ -522,11 +507,12 @@ window.onload = function() {
 								escapePosition:offset+skip
 							});
 						}
-						else
+						else{
 							proposals.push({
 								proposal: keyActions[i],
 								description: keyActions[i]+" : "+keyDescs[i]
 							});
+						}
 					}
 				}
 			}
@@ -540,11 +526,6 @@ window.onload = function() {
         contentType: ["text/x-markdown"]
     });
 
-
-    //===================================== PART 4 ============================================================
-    /**
-     * The forth part is a highlighter extension that provides some very simple syntax highlighting for Markdown text.
-     */
 
     // Create the syntax highlighting service.
     var markdownGrammar = {
