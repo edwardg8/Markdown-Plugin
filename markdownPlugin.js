@@ -31,7 +31,6 @@ window.onload = function() {
             extension: ["md", "markdown", "mdown", "mkd", "mkdn"]
         }]
     });
-
     /**
      * A helper function that converts lines of markdown text into a list. If the lines are already
      * a list, it will remove the list markup.
@@ -88,6 +87,108 @@ window.onload = function() {
 
     // Register the editor command
     provider.registerServiceProvider("orion.edit.command", serviceImpl, serviceProps);
+    
+    
+	// transforms the flat list of headings into a nested outline
+	function nestHeadings(headings){
+		var root;
+		var parent;
+		
+		var curr_level;
+		var i;
+		
+		root = parent = [];
+		curr_level = 1;
+			
+		for(i=0; i<headings.length; i++){
+			if(headings[i].level < curr_level){
+				parent = root;
+				curr_level = 1;
+			}       
+			while(Number(headings[i].level) > curr_level){
+				parent = parent[parent.length-1];
+				if(typeof parent['children'] === "undefined"){
+					parent.children = [];
+				}
+				parent = parent.children;
+				curr_level = curr_level +1;
+			}
+			
+			if(Number(headings[i].level) === curr_level){
+				parent.push({
+					label: headings[i].label,
+					line: headings[i].line
+				});
+			}
+		}
+		return root;
+	}
+	
+	
+	function findHeadings(content){
+		var outline = [];
+	    var lines, line;
+	    lines = content.split(/\r?\n/);
+	    
+	    // Collect the properties of every heading on the page
+	    for (var i=0; i < lines.length; i++) {
+	        line = lines[i];
+	        // match = /^(=+)\s*(.+?)\s*(=+)$/.exec(line);
+	        var match1 = /^===.*$/.exec(line);
+			var match2 = /^---.*$/.exec(line);  
+			var match3 = /^#.*$/.exec(line); 
+	        if ((match1 || match2) && i>0){
+				outline.push({
+	                label: lines[i-1],
+	                line: i,  // lines are numbered from 1
+	                level: 1
+				});
+	        }else if (match3){
+				var lab=/^(#+)\s*(.+?)$/.exec(line);
+				outline.push({
+	                label: lab[2],
+	                line: i+1,  // lines are numbered from 1
+	                level: 1
+				});
+	        }else {
+					var matches=[
+						/^.*<https?:[/][/].*$/.exec(line),
+						/^[^[]*[[][[].*$/.exec(line),
+						/^[^[]*[[].+\][(]https?:[/][/].*$/.exec(line),
+						/^.*[!][[].*$/.exec(line)
+					];
+					for (var j=0; j<matches.length;j++){
+						if (matches[j]){
+							outline.push({
+				                label: line,
+				                line: i+1,  // lines are numbered from 1
+				                level: 2
+							});
+							break;
+						}
+					}
+
+	        }
+	    }    
+	    return nestHeadings(outline);
+	}
+	
+	var serviceProvider = {
+		computeOutline: function(editorContext, options){
+			return editorContext.getText().then(findHeadings);
+		},
+		getOutline: function(contents, title){
+			return findHeadings(contents);
+		}
+	};
+	
+
+	var serviceProperties = {
+		name: "Markdown Outliner",
+        contentType: ["text/x-markdown"]
+	};
+	
+	provider.registerServiceProvider("orion.edit.outliner", serviceProvider, serviceProperties);
     
 	function isNumber(str) {
 	    var n = ~~Number(str);
@@ -573,4 +674,3 @@ window.onload = function() {
     // Finally, connect the provider
     provider.connect();
 };
-
